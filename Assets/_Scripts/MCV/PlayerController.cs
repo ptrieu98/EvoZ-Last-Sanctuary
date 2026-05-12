@@ -1,157 +1,186 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(PlayerModel))]
-[RequireComponent(typeof(CapsuleCollider))] // Khai báo thêm Capsule Collider
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class PlayerController : MonoBehaviour
 {
-    private PlayerModel model;
+    [Header("=== LIÊN KẾT MVC ===")]
+    public PlayerModel model;
+    public PlayerView view;
+
+    [Header("=== TRẠNG THÁI ===")]
+    public bool isJumping = false;
+    public bool isDashing = false;
+    public float jumpDistance = 3.5f; 
+
+    // --- Các Component hệ thống ---
     private Rigidbody rb;
-    private CapsuleCollider capsuleCol; // Biến kiểm soát va chạm
+    private CapsuleCollider capsuleCol;
     private Camera mainCamera;
 
+    // --- Các biến tính toán ---
+    private LedgeJumpPoint currentLedge;
     private Vector3 movementInput;
-    
-    private bool isDashing = false;
-    private float currentSpeedMultiplier = 1f;
-
-    private bool isJumping = false;
-    private LedgeJumpPoint currentLedge = null;
 
     void Start()
     {
-        model = GetComponent<PlayerModel>();
         rb = GetComponent<Rigidbody>();
-        capsuleCol = GetComponent<CapsuleCollider>(); // Khởi tạo
-        mainCamera = Camera.main;
+        capsuleCol = GetComponent<CapsuleCollider>();
+        mainCamera = Camera.main; 
 
-        rb.freezeRotation = true; 
-        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        if (model == null) model = GetComponent<PlayerModel>();
+        if (view == null) view = GetComponent<PlayerView>();
     }
 
     void Update()
     {
         if (isJumping) return;
 
-        // 1. NHẬN LỆNH
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveZ = Input.GetAxisRaw("Vertical");   
-        movementInput = new Vector3(moveX, 0f, moveZ).normalized; 
-
-        // 2. DASH (Lướt)
-        if (Input.GetKeyDown(KeyCode.Space) && !isDashing && model.currentStamina >= model.dashStaminaCost && movementInput.magnitude > 0)
+        // --- HỒI PHỤC THỂ LỰC ---
+        if (model.currentStamina < model.maxStamina && !isDashing)
         {
+            model.currentStamina += model.staminaRegenRate * Time.deltaTime;
+            model.currentStamina = Mathf.Clamp(model.currentStamina, 0, model.maxStamina);
+        }
+
+        // 1. Nhận phím di chuyển
+        movementInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0f, Input.GetAxisRaw("Vertical")).normalized;
+
+        // 2. LƯỚT (Dash)
+        if (Input.GetKeyDown(KeyCode.Space) && !isDashing && model.currentStamina >= model.dashStaminaCost)
+        {
+            model.currentStamina -= model.dashStaminaCost; 
             StartCoroutine(DashRoutine());
         }
 
-        // 3. LEDGE JUMP (Nhảy vách đá)
+        // 3. NHẢY VÁCH (Ledge Jump)
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentLedge != null && !isDashing)
         {
-            StartCoroutine(JumpDownRoutine(currentLedge.landingSpot.position));
+            StartCoroutine(JumpDownRoutine());
         }
 
-        // 4. HỒI THỂ LỰC
-        if (!isDashing && model.currentStamina < model.maxStamina)
+        // 4. XOAY MẶT
+        if (!isDashing)
         {
-            model.currentStamina += model.staminaRegenRate * Time.deltaTime;
-            if (model.currentStamina > model.maxStamina) 
-                model.currentStamina = model.maxStamina;
+            AimAtMouse();
         }
     }
 
     void FixedUpdate()
     {
-        if (isJumping) return;
-        Move();
-        AimAtMouse();
-    }
+        // Khóa di chuyển bình thường nếu nhân vật đang nhảy vách hoặc đang lướt
+        if (isJumping || isDashing) return;
 
-    private void Move()
-    {
-        float currentSpeed = model.moveSpeed * currentSpeedMultiplier;
-        Vector3 newVelocity = new Vector3(movementInput.x * currentSpeed, rb.linearVelocity.y, movementInput.z * currentSpeed);
+        Vector3 targetVelocity = movementInput * model.moveSpeed;
 
-        // --- FIX LỖI 1: CHỐNG BAY LÊN KHI ĐẠP BẬC THỀM ---
-        // Nếu vận tốc trục Y bị đẩy lên > 0 (văng lên) do dẫm phải đá vụn hay bậc thềm, ta ép nó về 0 ngay lập tức.
-        if (newVelocity.y > 0) 
+        // --- LỚP BẢO VỆ 1: RADAR TRƯỢT TƯỜNG ---
+        if (movementInput.sqrMagnitude > 0)
         {
-            newVelocity.y = 0; 
+            // Bắn tia radar hình cầu từ vị trí ngực nhân vật ra phía trước
+            Vector3 chestPosition = transform.position + Vector3.up * 1f; 
+            
+            // Dò tìm vật cản trong bán kính 0.4 mét (vừa khít với bề ngang cơ thể)
+            if (Physics.SphereCast(chestPosition, 0.4f, movementInput, out RaycastHit hit, 0.5f))
+            {
+                // Nếu bề mặt va chạm dốc đứng (normal.y < 0.3 nghĩa là dốc hơn 70 độ) -> Đây là Tường
+                if (hit.normal.y < 0.3f) 
+                {
+                    // Nắn lại vận tốc: Chuyển từ "đâm thẳng" sang "trượt dọc" theo mặt tường
+                    targetVelocity = Vector3.ProjectOnPlane(targetVelocity, hit.normal);
+                }
+            }
         }
 
-        rb.linearVelocity = newVelocity;
+        // --- LỚP BẢO VỆ 2: GHÌ TRỌNG TÂM (CHỐNG BAY) ---
+        float currentYVel = rb.linearVelocity.y;
+        
+        // Nếu vật lý Unity cố tình nảy nhân vật lên (Y > 0) do leo dốc/bậc thang
+        if (currentYVel > 0)
+        {
+            // Ép vận tốc nảy lại tối đa chỉ ở mức 2f (Đủ để bước lên bậc thang, tuyệt đối cấm bay lên không trung)
+            currentYVel = Mathf.Clamp(currentYVel, 0f, 2f); 
+        }
+
+        // Áp dụng vận tốc cuối cùng
+        rb.linearVelocity = new Vector3(targetVelocity.x, currentYVel, targetVelocity.z);
+        
+        // Bồi thêm trọng lực nhân tạo để gót chân luôn bám dính xuống sàn
+        rb.AddForce(Vector3.down * 30f, ForceMode.Acceleration);
     }
 
     private void AimAtMouse()
     {
-        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-        Plane groundPlane = new Plane(Vector3.up, Vector3.up * rb.position.y);
-        float rayDistance;
+        if (mainCamera == null) return;
 
-        if (groundPlane.Raycast(ray, out rayDistance))
+        Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Plane groundPlane = new Plane(Vector3.up, new Vector3(0, transform.position.y, 0));
+        
+        if (groundPlane.Raycast(ray, out float rayDistance))
         {
             Vector3 pointToLook = ray.GetPoint(rayDistance);
-            Vector3 lookDirection = new Vector3(pointToLook.x, rb.position.y, pointToLook.z);
-            transform.LookAt(lookDirection);
+            Vector3 lookDirection = pointToLook - transform.position;
+            lookDirection.y = 0f; 
+
+            if (lookDirection.sqrMagnitude > 0.1f) 
+            {
+                transform.rotation = Quaternion.LookRotation(lookDirection);
+            }
         }
     }
 
+    // --- THUẬT TOÁN LƯỚT (Đã Tối Ưu Chống Xuyên Tường) ---
     private IEnumerator DashRoutine()
     {
-        isDashing = true;                               
-        model.currentStamina -= model.dashStaminaCost;  
-        currentSpeedMultiplier = model.dashMultiplier;  
-        yield return new WaitForSeconds(model.dashDuration); 
-        currentSpeedMultiplier = 1f;                    
-        isDashing = false;                              
+        isDashing = true;
+        
+        if (view != null) view.PlayDashEffects();
+
+        Vector3 dashDirection = movementInput.magnitude > 0.1f ? movementInput : transform.forward;
+        float actualDashSpeed = model.moveSpeed * model.dashMultiplier;
+        float timePassed = 0f;
+
+        while (timePassed < model.dashDuration)
+        {
+            // ÉP VẬN TỐC THUẦN TÚY: Để Unity tự tính toán va chạm theo thời gian thực (Continuous)
+            rb.linearVelocity = dashDirection * actualDashSpeed;
+            
+            timePassed += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate(); 
+        }
+
+        // PHANH KHẨN CẤP: Lướt xong phải xóa vận tốc ngay lập tức để không bị trượt đi tiếp
+        rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
+        
+        isDashing = false;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        LedgeJumpPoint ledge = other.GetComponent<LedgeJumpPoint>();
-        if (ledge != null) currentLedge = ledge;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        LedgeJumpPoint ledge = other.GetComponent<LedgeJumpPoint>();
-        if (ledge != null && ledge == currentLedge) currentLedge = null;
-    }
-
-    // --- BẢN HOÀN THIỆN TỐI THƯỢNG: DÙNG TIA LASER DÒ ĐỊA HÌNH ---
-    private IEnumerator JumpDownRoutine(Vector3 landingSpotPos)
+    // --- THUẬT TOÁN NHẢY VÁCH TỰ ĐỘNG DÒ ĐƯỜNG ---
+    private IEnumerator JumpDownRoutine()
     {
         isJumping = true;
+        currentLedge = null; 
         
-        // 1. TẮT VA CHẠM (Chống vướng mép đá 100%)
         rb.isKinematic = true;           
         capsuleCol.enabled = false;      
 
         Vector3 startPosition = transform.position;
+        Vector3 jumpDirection = transform.forward; 
+        Vector3 predictedLandingXZ = startPosition + (jumpDirection * jumpDistance);
 
-        // 2. DÒ TÌM MẶT ĐẤT THẬT SỰ BẰNG RAYCAST
-        // Đưa điểm bắn tia lên cao hơn nhân vật 5 đơn vị để đảm bảo bao quát được địa hình
-        Vector3 rayStartPos = new Vector3(landingSpotPos.x, startPosition.y + 5f, landingSpotPos.z);
-        
-        float groundY = landingSpotPos.y; // Giá trị dự phòng
+        Vector3 rayStartPos = new Vector3(predictedLandingXZ.x, startPosition.y + 5f, predictedLandingXZ.z);
+        float groundY = startPosition.y - 10f; 
 
-        // Bắn tia laser xuống dưới (tối đa 20 đơn vị). Nếu chạm vào bề mặt map (mặt đất):
         if (Physics.Raycast(rayStartPos, Vector3.down, out RaycastHit hit, 20f))
         {
-            groundY = hit.point.y; // Ghi nhận độ cao thực tế của địa hình tại điểm đó
+            groundY = hit.point.y; 
         }
 
-        // 3. TỰ ĐỘNG ĐO GÓT CHÂN (Chống lún 100% dù Pivot ở đâu)
-        // Lấy tọa độ Y của tâm nhân vật TRỪ ĐI điểm thấp nhất của Collider = Khoảng cách từ tâm đến chân
         float pivotToFeetOffset = transform.position.y - capsuleCol.bounds.min.y;
-
-        // 4. CHỐT ĐIỂM ĐÁP: X,Z của khối Landing + Y của mặt đất thật + Độ dài chân
-        Vector3 targetPosition = new Vector3(landingSpotPos.x, groundY + pivotToFeetOffset, landingSpotPos.z);
+        Vector3 targetPosition = new Vector3(predictedLandingXZ.x, groundY + pivotToFeetOffset, predictedLandingXZ.z);
 
         float timePassed = 0f;
         float duration = 0.5f; 
 
-        // 5. DI CHUYỂN VÒNG CUNG
         while (timePassed < duration)
         {
             timePassed += Time.deltaTime;
@@ -165,11 +194,25 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        // 6. TIẾP ĐẤT CHÍNH XÁC VÀ TRẢ LẠI VẬT LÝ
         transform.position = targetPosition; 
+        
+        // Reset lại vận tốc vật lý trước khi bật va chạm lại
+        rb.linearVelocity = Vector3.zero;
         
         capsuleCol.enabled = true; 
         rb.isKinematic = false;    
         isJumping = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        LedgeJumpPoint ledge = other.GetComponent<LedgeJumpPoint>();
+        if (ledge != null) currentLedge = ledge;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        LedgeJumpPoint ledge = other.GetComponent<LedgeJumpPoint>();
+        if (ledge != null && currentLedge == ledge) currentLedge = null;
     }
 }

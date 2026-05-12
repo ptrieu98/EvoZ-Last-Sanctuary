@@ -1,7 +1,7 @@
 using UnityEngine;
 
+// Đừng xóa file này nhé, code PlayerController cần nó để nhận diện khu vực nhảy!
 public class LedgeJumpPoint : MonoBehaviour
 {
-    [Tooltip("Kéo thả một Transform (điểm trống) nằm ở dưới đất vào đây để làm điểm đáp")]
-    public Transform landingSpot;
+    // Rỗng hoàn toàn - Mọi tính toán điểm đáp giờ đây đã được tự động hóa.
 }
