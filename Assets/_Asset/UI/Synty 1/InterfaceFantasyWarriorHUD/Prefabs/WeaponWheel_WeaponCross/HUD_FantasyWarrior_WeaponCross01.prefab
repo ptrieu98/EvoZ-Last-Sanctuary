@@ -27,11 +27,11 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4505054964335661401}
   - {fileID: 6336637821721861397}
   m_Father: {fileID: 8801277775278606202}
-  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -91,11 +91,11 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7979057448073579225}
   - {fileID: 1482677678702313587}
   m_Father: {fileID: 8801277775278606202}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -156,9 +156,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7151228555497860457}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -229,6 +229,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7151228555497860457}
   - {fileID: 7093673554579056258}
@@ -236,7 +237,6 @@ RectTransform:
   - {fileID: 806094859553803306}
   - {fileID: 3435039878747384104}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -270,11 +270,11 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7378219681842433733}
   - {fileID: 1327393377321704749}
   m_Father: {fileID: 8801277775278606202}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -333,12 +333,12 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4416259763945955559}
   - {fileID: 2186643361264775330}
   - {fileID: 7648359071488817190}
   m_Father: {fileID: 8801277775278606202}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -373,9 +373,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7151228555497860457}
-  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -447,11 +447,11 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2598535797319316926}
   - {fileID: 8873143720553945282}
   m_Father: {fileID: 8801277775278606202}
-  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -512,9 +512,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7151228555497860457}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -564,6 +564,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 806094859553803306}
     m_Modifications:
     - target: {fileID: 1237007093643891577, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -588,6 +589,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -707,6 +712,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &6336637821721861397 stripped
 RectTransform:
@@ -718,6 +726,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3737436632709335724}
     m_Modifications:
     - target: {fileID: 1137844316597168522, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -732,6 +741,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -7244873375232470608, guid: 3cd57b48cb32aa2408ee0460d689be68, type: 2}
+    - target: {fileID: 1237007093643891577, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4062094211531707671, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.9914449
@@ -770,6 +783,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -889,6 +906,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &7378219681842433733 stripped
 RectTransform:
@@ -900,6 +920,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7093673554579056258}
     m_Modifications:
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -916,6 +937,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1019,6 +1044,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &7979057448073579225 stripped
 RectTransform:
@@ -1030,6 +1058,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3435039878747384104}
     m_Modifications:
     - target: {fileID: 1237007093643891577, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1054,6 +1083,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1173,6 +1206,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &8873143720553945282 stripped
 RectTransform:
@@ -1184,6 +1220,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3737436632709335724}
     m_Modifications:
     - target: {fileID: 1137844316597168522, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1198,6 +1235,10 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: -7244873375232470608, guid: 3cd57b48cb32aa2408ee0460d689be68, type: 2}
+    - target: {fileID: 1237007093643891577, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
+      objectReference: {fileID: 0}
     - target: {fileID: 4062094211531707671, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -1220,6 +1261,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1339,6 +1384,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &1327393377321704749 stripped
 RectTransform:
@@ -1350,6 +1398,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7093673554579056258}
     m_Modifications:
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1370,6 +1419,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1477,6 +1530,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &1482677678702313587 stripped
 RectTransform:
@@ -1488,6 +1544,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 3435039878747384104}
     m_Modifications:
     - target: {fileID: 1237007093643891577, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1512,6 +1569,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1631,6 +1692,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &2598535797319316926 stripped
 RectTransform:
@@ -1642,6 +1706,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 806094859553803306}
     m_Modifications:
     - target: {fileID: 1237007093643891577, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1666,6 +1731,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4624611262921994286, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
@@ -1785,6 +1854,9 @@ PrefabInstance:
       value: WeaponCross_Item_U_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 473f0a814b2c6414bb9a971af4f36d6d, type: 3}
 --- !u!224 &4505054964335661401 stripped
 RectTransform:

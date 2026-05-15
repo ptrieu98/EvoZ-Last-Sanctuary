@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7191947525329886477}
   - component: {fileID: 7663081976321254494}
   m_Layer: 0
-  m_Name: Button_FantasyWarrior_WorldSpace_Item
+  m_Name: Button_FantasyWarrior_WorldSpace_Item01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,10 +30,10 @@ RectTransform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7414682449658289998}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -135,9 +135,9 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7414682449658289998}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -232,11 +232,11 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 570249380742758391}
   - {fileID: 2229135690443296556}
   m_Father: {fileID: 8704052855385624798}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -338,6 +338,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 7414682449658289998}
     m_Modifications:
     - target: {fileID: 2749708641982727653, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
@@ -415,7 +416,7 @@ PrefabInstance:
     - target: {fileID: 3420556218193743673, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2100000, guid: a3063f2d22ae4ba44828c3885272eaf2, type: 2}
+      objectReference: {fileID: -7244873375232470608, guid: 3cd57b48cb32aa2408ee0460d689be68, type: 2}
     - target: {fileID: 3420556218193743673, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4289577940
@@ -423,6 +424,10 @@ PrefabInstance:
     - target: {fileID: 3420556218193743673, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
       propertyPath: m_HorizontalAlignment
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3420556218193743673, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
+      propertyPath: 'm_ActiveFontFeatures.Array.data[0]'
+      value: 1801810542
       objectReference: {fileID: 0}
     - target: {fileID: 4546473359128379108, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
       propertyPath: m_Name
@@ -517,12 +522,10 @@ PrefabInstance:
       value: Label_CurrencyValue
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
---- !u!224 &2229135690443296556 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 2749708641982727653, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
-  m_PrefabInstance: {fileID: 4091404165819353801}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1711323502386497008 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3420556218193743673, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
@@ -534,3 +537,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &2229135690443296556 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 2749708641982727653, guid: 0ed0a70e5a4682c4c9e105178800133f, type: 3}
+  m_PrefabInstance: {fileID: 4091404165819353801}
+  m_PrefabAsset: {fileID: 0}

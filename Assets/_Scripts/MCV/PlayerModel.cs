@@ -10,6 +10,8 @@ public class PlayerModel : MonoBehaviour
     public float currentHealth;
     public float maxStamina = 100f;
     public float currentStamina;
+    public float maxVirus = 100f;
+    public float currentVirus = 0f; // Bắt đầu game chưa bị nhiễm
 
     [Header("Chỉ số Lướt (Dash)")]
     public float dashMultiplier = 3.5f;   // Lướt nhanh gấp 3.5 lần bình thường
@@ -19,6 +21,17 @@ public class PlayerModel : MonoBehaviour
 
     [Header("Chỉ số Nhảy vách đá (Ledge Jump)")]
     public float jumpHeight = 1.5f;   // Độ nảy lên trên không trước khi rơi xuống
+
+    [Header("=== CHIẾN ĐẤU ===")]
+    // Mảng lưu trữ 4 vũ khí trang bị
+    public ItemData[] equippedWeapons = new ItemData[4]; 
+    public int activeWeaponIndex = 0; // Ô đang chọn (0 đến 3)
+    
+    public bool isAttacking = false;
+    public float attackDuration = 0.6f; // Tổng thời gian của 1 đòn chém
+
+    // Tiện ích để Controller luôn lấy đúng vũ khí đang được chọn trên tay
+    public ItemData CurrentWeapon => equippedWeapons[activeWeaponIndex];
 
     void Start()
     {
