@@ -1,19 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance; 
+    public static bool isUIOpen = false;
 
-    [Header("=== GIAO DIỆN UI ===")]
-    public GameObject inventoryPanel; 
+    [Header("=== GIAO DIỆN TỔNG (BẤM TAB ĐỂ MỞ) ===")]
+    public GameObject mainUIPanel; 
     public GameObject hotbarPanel;    
+
+    [Header("=== CÁC TRANG BÊN TRONG (TABS) ===")]
+    public GameObject statsPanel;     
+    public GameObject inventoryPanel; 
+    
+    [Header("=== NÚT BẤM ĐỂ ĐỔI MÀU ===")]
+    public Image statsTabImage;       
+    public Image inventoryTabImage;   
+    public Color activeColor = new Color(1f, 0.8f, 0f, 1f);       
+    public Color inactiveColor = new Color(0.8f, 0.8f, 0.8f, 1f); 
+
+    [Header("=== CÀI ĐẶT TÚI ĐỒ CHÍNH ===")]
     public InventorySlot[] inventorySlots; 
+
+    // --- MỚI THÊM: QUẢN LÝ BALO PHỤ ---
+    [Header("=== CÀI ĐẶT TÚI ĐỒ GEN (BALO PHỤ) ===")]
+    public InventorySlot[] geneSlots; // KÉO 30 Ô RỖNG BÊN TRANG TIẾN HÓA VÀO ĐÂY
 
     [Header("=== PREFAB ===")]
     public GameObject itemUIPrefab; 
 
-    // DANH SÁCH LƯU TRỮ TOÀN BỘ 8 Ô TRANG BỊ (4 TÚI + 4 HOTBAR)
     [HideInInspector] 
     public List<EquipSlotSync> allEquipSlots = new List<EquipSlotSync>();
 
@@ -25,18 +42,42 @@ public class InventoryManager : MonoBehaviour
 
     private void Start()
     {
-        if (inventoryPanel != null) inventoryPanel.SetActive(false);
+        if (mainUIPanel != null) mainUIPanel.SetActive(false);
         if (hotbarPanel != null) hotbarPanel.SetActive(true);
     }
 
-    private void Update()
+    public void ToggleMainUI()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            bool isOpening = !inventoryPanel.activeSelf; 
-            if (inventoryPanel != null) inventoryPanel.SetActive(isOpening);
-            if (hotbarPanel != null) hotbarPanel.SetActive(!isOpening);
-        }
+        bool isOpening = !mainUIPanel.activeSelf; 
+        isUIOpen = isOpening;
+        
+        if (mainUIPanel != null) mainUIPanel.SetActive(isOpening);
+        if (hotbarPanel != null) hotbarPanel.SetActive(!isOpening);
+
+        if (TooltipManager.Instance != null) TooltipManager.Instance.HideTooltip();
+
+        if (isOpening) OpenStatsTab();
+    }
+
+    public void CloseMainUI()
+    {
+        if (mainUIPanel != null && mainUIPanel.activeSelf) ToggleMainUI();
+    }
+
+    public void OpenStatsTab()
+    {
+        if (statsPanel != null) statsPanel.SetActive(true);
+        if (inventoryPanel != null) inventoryPanel.SetActive(false);
+        if (statsTabImage != null) statsTabImage.color = activeColor;
+        if (inventoryTabImage != null) inventoryTabImage.color = inactiveColor;
+    }
+
+    public void OpenInventoryTab()
+    {
+        if (statsPanel != null) statsPanel.SetActive(false);
+        if (inventoryPanel != null) inventoryPanel.SetActive(true);
+        if (statsTabImage != null) statsTabImage.color = inactiveColor;
+        if (inventoryTabImage != null) inventoryTabImage.color = activeColor;
     }
 
     public bool AddItem(ItemData newItemData)
@@ -51,25 +92,165 @@ public class InventoryManager : MonoBehaviour
                 if (draggableItem != null)
                 {
                     draggableItem.itemData = newItemData;
+                    draggableItem.equipInstance = null; 
                     draggableItem.InitializeItem(); 
                 }
                 return true; 
             }
         }
-        Debug.LogWarning("Túi đồ đã đầy, không thể nhặt thêm!");
+        Debug.LogWarning("Túi đồ chính đã đầy!");
         return false; 
     }
 
-    // --- HÀM CHO PHÉP CÁC Ô TỰ BÁO DANH ---
-    public void RegisterEquipSlot(EquipSlotSync slot)
+    public bool AddEquipment(EquipmentInstance newEquip)
     {
-        if (!allEquipSlots.Contains(slot)) 
+        foreach (InventorySlot slot in inventorySlots)
         {
-            allEquipSlots.Add(slot);
+            if (slot.transform.childCount == 0)
+            {
+                GameObject itemObj = Instantiate(itemUIPrefab, slot.transform);
+                DraggableItem draggableItem = itemObj.GetComponent<DraggableItem>();
+                
+                draggableItem.equipInstance = newEquip; 
+                draggableItem.InitializeItem(); 
+                
+                return true; 
+            }
+        }
+        Debug.LogWarning("Túi đồ chính đã đầy!");
+        return false; 
+    }
+
+    // ==========================================
+    // NHẶT MÃ GEN KHUYẾT VÀO BALO PHỤ (CỘT TRÁI)
+    // ==========================================
+    public bool AddGlitchDNA(GlitchDNAInstance newDNA)
+    {
+        if (geneSlots == null || geneSlots.Length == 0)
+        {
+            Debug.LogError("LỖI: Chưa gắn các ô rỗng vào mảng Gene Slots trong InventoryManager!");
+            return false;
+        }
+
+        // Bỏ qua Balo chính, quét trực tiếp vào 30 ô Gen
+        foreach (InventorySlot slot in geneSlots)
+        {
+            if (slot.transform.childCount == 0)
+            {
+                GameObject itemObj = Instantiate(itemUIPrefab, slot.transform);
+                DraggableItem draggableItem = itemObj.GetComponent<DraggableItem>();
+                
+                draggableItem.glitchDNAInstance = newDNA; 
+                draggableItem.InitializeItem(); 
+                
+                // Gắn bẫy click để xem chỉ số trên Trạm Tẩy Luyện
+                GlitchDNAClickHandler clicker = itemObj.AddComponent<GlitchDNAClickHandler>();
+                clicker.genData = newDNA;
+
+                return true; 
+            }
+        }
+        Debug.LogWarning("Túi chứa Gen đã đầy!");
+        return false; 
+    }
+
+    public int GetMaterialCount(ItemData materialToFind)
+    {
+        int total = 0;
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            DraggableItem item = slot.GetComponentInChildren<DraggableItem>();
+            if (item != null && item.itemData != null && item.itemData.itemName == materialToFind.itemName)
+                total += item.itemData.ammoAmount; 
+        }
+        return total;
+    }
+
+    public void ConsumeMaterial(ItemData materialToConsume, int amountToConsume)
+    {
+        int remaining = amountToConsume;
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            DraggableItem item = slot.GetComponentInChildren<DraggableItem>();
+            if (item != null && item.itemData != null && item.itemData.itemName == materialToConsume.itemName)
+            {
+                if (!item.itemData.name.Contains("(Clone)"))
+                {
+                    item.itemData = ScriptableObject.Instantiate(item.itemData);
+                    item.itemData.name += "(Clone)";
+                }
+
+                if (item.itemData.ammoAmount >= remaining)
+                {
+                    item.itemData.ammoAmount -= remaining;
+                    remaining = 0;
+                    item.InitializeItem(); 
+                    if (item.itemData.ammoAmount <= 0) Destroy(item.gameObject);
+                    break; 
+                }
+                else
+                {
+                    remaining -= item.itemData.ammoAmount;
+                    Destroy(item.gameObject); 
+                }
+            }
         }
     }
 
-    // --- ĐỒNG BỘ CHÍNH XÁC ---
+    // ==========================================
+    // XỬ LÝ TINH HẠCH CHO TRẠM TẨY LUYỆN
+    // ==========================================
+    public int GetCoreCount(CoreTier tierRequired)
+    {
+        int total = 0;
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            DraggableItem item = slot.GetComponentInChildren<DraggableItem>();
+            if (item != null && item.itemData != null && item.itemData.category == ItemCategory.Core && item.itemData.coreTier == tierRequired)
+                total += item.itemData.ammoAmount;
+        }
+        return total;
+    }
+
+    public bool ConsumeCore(CoreTier tierRequired, int amountToConsume)
+    {
+        if (GetCoreCount(tierRequired) < amountToConsume) return false;
+
+        int remaining = amountToConsume;
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            DraggableItem item = slot.GetComponentInChildren<DraggableItem>();
+            if (item != null && item.itemData != null && item.itemData.category == ItemCategory.Core && item.itemData.coreTier == tierRequired)
+            {
+                if (!item.itemData.name.Contains("(Clone)"))
+                {
+                    item.itemData = ScriptableObject.Instantiate(item.itemData);
+                    item.itemData.name += "(Clone)";
+                }
+
+                if (item.itemData.ammoAmount >= remaining)
+                {
+                    item.itemData.ammoAmount -= remaining;
+                    remaining = 0;
+                    item.InitializeItem(); 
+                    if (item.itemData.ammoAmount <= 0) Destroy(item.gameObject);
+                    break; 
+                }
+                else
+                {
+                    remaining -= item.itemData.ammoAmount;
+                    Destroy(item.gameObject); 
+                }
+            }
+        }
+        return true; 
+    }
+
+    public void RegisterEquipSlot(EquipSlotSync slot)
+    {
+        if (!allEquipSlots.Contains(slot)) allEquipSlots.Add(slot);
+    }
+
     public void RefreshAllEquipSlots()
     {
         foreach (EquipSlotSync slot in allEquipSlots)

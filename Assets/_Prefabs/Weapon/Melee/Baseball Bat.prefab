@@ -97,8 +97,9 @@ GameObject:
   - component: {fileID: 5443054423280999924}
   - component: {fileID: 5471644521743780150}
   - component: {fileID: 5461738478438343010}
-  - component: {fileID: 772782100422071824}
   - component: {fileID: 4432309197946833616}
+  - component: {fileID: 872185544782713409}
+  - component: {fileID: 7552085728421302996}
   m_Layer: 0
   m_Name: Baseball Bat
   m_TagString: Untagged
@@ -175,8 +176,30 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &772782100422071824
-BoxCollider:
+--- !u!114 &4432309197946833616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5449300665287664998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db46f9c29938a494ab1605bc6e021f37, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 8d3d4ec1ba2760d45ac804e164cdd45f, type: 2}
+  droppedEquipment:
+    instanceID: 
+    baseTemplate: {fileID: 0}
+    starLevel: 0
+    basicStats: []
+    specialStats: []
+    passiveSkills: 
+  pickupRadius: 2.5
+  pickupSound: {fileID: 0}
+--- !u!135 &872185544782713409
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -194,18 +217,26 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9585951, y: 0.7373916, z: 0.9526555}
-  m_Center: {x: -0.06012413, y: -0.0018912703, z: 0.47632775}
---- !u!114 &4432309197946833616
-MonoBehaviour:
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &7552085728421302996
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5449300665287664998}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db46f9c29938a494ab1605bc6e021f37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 8d3d4ec1ba2760d45ac804e164cdd45f, type: 2}
+  serializedVersion: 3
+  m_Size: {x: 0.07190956, y: 0.07417175, z: 0.9526555}
+  m_Center: {x: 0.0000000018626451, y: -0.001131285, z: 0.47632775}

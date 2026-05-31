@@ -1,5 +1,5 @@
 public interface IDamageable
 {
-    // Bất kỳ ai thực thi interface này ĐỀU PHẢI có hàm nhận sát thương
-    void TakeDamage(float amount);
+    // ĐÃ THÊM: bool isCrit = false để nhận diện đòn chí mạng
+    float TakeDamage(float amount, float armorPenetration = 0f, float accuracy = 0f, bool isCrit = false);
 }

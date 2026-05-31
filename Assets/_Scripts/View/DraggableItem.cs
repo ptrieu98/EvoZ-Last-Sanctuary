@@ -1,78 +1,133 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using TMPro;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class DraggableItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    [Header("Dữ liệu Item")]
-    public ItemData itemData;
+    [Header("=== DỮ LIỆU VẬT PHẨM ===")]
+    public ItemData itemData; // Dùng cho vũ khí/đạn/tiêu hao/nguyên liệu/TINH HẠCH
+    
+    [Tooltip("Dùng cho trang bị ARPG đã qua đúc/Roll chỉ số")]
+    public EquipmentInstance equipInstance; 
+
+    // --- MỚI THÊM: CHỨA DỮ LIỆU MÃ GEN ĐÃ ĐƯỢC RANDOM CHỈ SỐ ---
+    [Tooltip("Dùng cho hệ thống Mã Gen Khuyết (Glitch DNA)")]
+    public GlitchDNAInstance glitchDNAInstance;
+
+    [Header("=== GIAO DIỆN UI ===")]
+    [Tooltip("Kéo Image chứa Icon của Prefab vào đây để tránh bắt nhầm Background")]
+    public Image iconImage; 
+    public TextMeshProUGUI cornerText;
     
     [HideInInspector] public Transform parentAfterDrag;
-    private Image image;
+    private CanvasGroup canvasGroup;
 
     private void Awake()
     {
-        image = GetComponent<Image>();
+        canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void InitializeItem()
     {
-        if (image == null) image = GetComponent<Image>();
-
-        if (itemData != null && itemData.icon != null)
+        if (iconImage == null)
         {
-            image.sprite = itemData.icon;
+            Debug.LogError("LỖI 1: Bạn chưa kéo Image vào ô 'Icon Image' trong Prefab!");
+            return;
+        }
+
+        iconImage.color = new Color(1f, 1f, 1f, 0f); 
+
+        // 1. KIỂM TRA NẾU ĐÂY LÀ MÃ GEN KHUYẾT
+        if (glitchDNAInstance != null && glitchDNAInstance.activeSkill != null)
+        {
+            if (glitchDNAInstance.activeSkill.icon != null)
+            {
+                iconImage.sprite = glitchDNAInstance.activeSkill.icon;
+                iconImage.color = Color.white;
+            }
+            
+            // Hiện chữ T1, T2, T3 hoặc Dị Biến ở góc
+            string tierStr = "T1";
+            if (glitchDNAInstance.tier == GenTier.Tier2) tierStr = "T2";
+            else if (glitchDNAInstance.tier == GenTier.Tier3) tierStr = "T3";
+            else if (glitchDNAInstance.tier == GenTier.Mutant) tierStr = "MUTANT";
+            
+            SetCustomCornerText(tierStr);
+        }
+        // 2. KIỂM TRA NẾU ĐÂY LÀ TRANG BỊ GACHA
+        else if (equipInstance != null && equipInstance.baseTemplate != null)
+        {
+            if (equipInstance.baseTemplate.icon != null)
+            {
+                iconImage.sprite = equipInstance.baseTemplate.icon;
+                iconImage.color = Color.white; 
+            }
+            SetCustomCornerText($"{equipInstance.starLevel} Sao");
+        }
+        // 3. ĐÂY LÀ VẬT PHẨM BÌNH THƯỜNG (Súng, Tinh hạch, v.v...)
+        else if (itemData != null)
+        {
+            if (itemData.icon != null)
+            {
+                iconImage.sprite = itemData.icon;
+                iconImage.color = Color.white;
+            }
+            UpdateStaticCornerText();
+        }
+        else 
+        {
+            Debug.LogError("LỖI KHÔNG CÓ DỮ LIỆU!");
+        }
+    }
+
+    public void UpdateStaticCornerText()
+    {
+        if (cornerText == null) return;
+
+        // --- CẬP NHẬT: Hiển thị số lượng cho cả TINH HẠCH (Category = Core) ---
+        if (itemData != null && (itemData.category == ItemCategory.Ammo || itemData.category == ItemCategory.Consumable || itemData.category == ItemCategory.Material || itemData.category == ItemCategory.Core))
+        {
+            cornerText.gameObject.SetActive(true);
+            cornerText.text = itemData.ammoAmount.ToString(); 
         }
         else
         {
-            Debug.LogError("Lỗi hiển thị trắng: Vật phẩm " + gameObject.name + " bị thiếu ItemData hoặc chưa gắn Icon!");
+            cornerText.gameObject.SetActive(false);
         }
+    }
+
+    public void SetCustomCornerText(string text)
+    {
+        if (cornerText == null) return;
+        cornerText.gameObject.SetActive(true);
+        cornerText.text = text;
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        EquipSlotSync oldSlotSync = transform.parent.GetComponent<EquipSlotSync>();
-
-        // 1. DỜI NHÀ TRƯỚC (Cứu vũ khí khỏi việc bị xóa nhầm bởi lệnh Refresh)
         parentAfterDrag = transform.parent; 
         transform.SetParent(transform.root); 
         transform.SetAsLastSibling();
-        image.raycastTarget = false; 
-
-        // 2. SAU ĐÓ MỚI XÓA DỮ LIỆU VÀ ĐỒNG BỘ
-        if (oldSlotSync != null)
-        {
-            int index = oldSlotSync.slotID - 1;
-            oldSlotSync.model.equippedWeapons[index] = null;
-            
-            // Cất vũ khí trên tay nhân vật
-            if (oldSlotSync.model.activeWeaponIndex == index)
-                oldSlotSync.controller.SwitchWeapon(index);
-                
-            // Lúc này gọi hàm Refresh cực kỳ an toàn vì vũ khí đã "chuyển hộ khẩu"
-            InventoryManager.Instance.RefreshAllEquipSlots();
-        }
+        
+        if (canvasGroup != null) canvasGroup.blocksRaycasts = false; 
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        transform.position = Input.mousePosition;
+        transform.position = Input.mousePosition; 
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Nhảy về nhà mới (hoặc nhà cũ nếu thả hụt)
         transform.SetParent(parentAfterDrag);
-        image.raycastTarget = true; 
-        transform.localPosition = Vector3.zero; 
+        transform.localPosition = Vector3.zero;
+        
+        if (canvasGroup != null) canvasGroup.blocksRaycasts = true; 
+        InitializeItem();
 
-        // 3. CHỐNG MẤT ĐỒ KHI THẢ HỤT (RỚT RA NGOÀI GIAO DIỆN)
-        EquipSlotSync finalSlot = parentAfterDrag.GetComponent<EquipSlotSync>();
-        if (finalSlot != null)
-        {
-            // Nếu người chơi thả hụt và vũ khí phải nảy về lại một ô trang bị
-            // Chúng ta phải nạp lại dữ liệu cho Model để chống lỗi
-            finalSlot.OnItemDroppedInSlot(itemData);
-        }
+        PlayerController pc = FindObjectOfType<PlayerController>();
+        if (pc != null) pc.UpdateAmmoDisplay();
     }
 }
