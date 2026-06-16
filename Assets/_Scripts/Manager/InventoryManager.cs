@@ -24,9 +24,9 @@ public class InventoryManager : MonoBehaviour
     [Header("=== CÀI ĐẶT TÚI ĐỒ CHÍNH ===")]
     public InventorySlot[] inventorySlots; 
 
-    // --- MỚI THÊM: QUẢN LÝ BALO PHỤ ---
-    [Header("=== CÀI ĐẶT TÚI ĐỒ GEN (BALO PHỤ) ===")]
-    public InventorySlot[] geneSlots; // KÉO 30 Ô RỖNG BÊN TRANG TIẾN HÓA VÀO ĐÂY
+    // --- MỚI THÊM: QUẢN LÝ BALO PHỤ (DẠNG LIST ĐỘNG) ---
+    [Header("=== KHO CHỨA GEN ===")]
+    public List<GlitchDNAInstance> ownedGenes = new List<GlitchDNAInstance>(); 
 
     [Header("=== PREFAB ===")]
     public GameObject itemUIPrefab; 
@@ -122,38 +122,25 @@ public class InventoryManager : MonoBehaviour
     }
 
     // ==========================================
-    // NHẶT MÃ GEN KHUYẾT VÀO BALO PHỤ (CỘT TRÁI)
+    // NHẶT MÃ GEN KHUYẾT VÀO DANH SÁCH (MỚI CẬP NHẬT)
     // ==========================================
     public bool AddGlitchDNA(GlitchDNAInstance newDNA)
     {
-        if (geneSlots == null || geneSlots.Length == 0)
+        // Nhặt là quăng thẳng vào Danh sách động (Không bị giới hạn 30 ô nữa)
+        ownedGenes.Add(newDNA);
+        
+        // Cập nhật lại UI Danh sách dọc nếu bảng Tiến Hóa Gen đang mở
+        if (GlitchDNAUIManager.Instance != null && GlitchDNAUIManager.Instance.gameObject.activeInHierarchy)
         {
-            Debug.LogError("LỖI: Chưa gắn các ô rỗng vào mảng Gene Slots trong InventoryManager!");
-            return false;
+            GlitchDNAUIManager.Instance.RefreshGeneList();
         }
-
-        // Bỏ qua Balo chính, quét trực tiếp vào 30 ô Gen
-        foreach (InventorySlot slot in geneSlots)
-        {
-            if (slot.transform.childCount == 0)
-            {
-                GameObject itemObj = Instantiate(itemUIPrefab, slot.transform);
-                DraggableItem draggableItem = itemObj.GetComponent<DraggableItem>();
-                
-                draggableItem.glitchDNAInstance = newDNA; 
-                draggableItem.InitializeItem(); 
-                
-                // Gắn bẫy click để xem chỉ số trên Trạm Tẩy Luyện
-                GlitchDNAClickHandler clicker = itemObj.AddComponent<GlitchDNAClickHandler>();
-                clicker.genData = newDNA;
-
-                return true; 
-            }
-        }
-        Debug.LogWarning("Túi chứa Gen đã đầy!");
-        return false; 
+        
+        return true; 
     }
 
+    // ==========================================
+    // HỆ THỐNG VẬT LIỆU (MATERIAL)
+    // ==========================================
     public int GetMaterialCount(ItemData materialToFind)
     {
         int total = 0;
@@ -246,6 +233,9 @@ public class InventoryManager : MonoBehaviour
         return true; 
     }
 
+    // ==========================================
+    // ĐỒNG BỘ TRANG BỊ
+    // ==========================================
     public void RegisterEquipSlot(EquipSlotSync slot)
     {
         if (!allEquipSlots.Contains(slot)) allEquipSlots.Add(slot);

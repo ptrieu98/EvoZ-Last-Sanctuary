@@ -161,17 +161,14 @@ public class SkillTreeManager : MonoBehaviour
     }
 
     // --- 4. HÀM XỬ LÝ KHI BẤM TAB TIẾN HÓA GEN ---
+    // --- HÀM XỬ LÝ KHI BẤM TAB TIẾN HÓA GEN ---
     public void ClickMainGenetic()
     {
         if (elementSubMenuPanel != null) elementSubMenuPanel.SetActive(false);
         
-        // Tắt hết các trang Kỹ năng hiện tại
         foreach (var branch in branches)
-        {
             if (branch.pagePanel != null) branch.pagePanel.SetActive(false);
-        }
         
-        // Bật Panel Cấy Ghép Gen
         if (geneticPanel != null) 
         {
             geneticPanel.SetActive(true);
@@ -179,16 +176,22 @@ public class SkillTreeManager : MonoBehaviour
             if (dnaUI != null) dnaUI.OpenPanel();
         }
 
-        // Cập nhật lại Header Text cho ngầu
         if (headerText != null) headerText.text = "TIẾN HÓA GEN MÃ KHUYẾT";
-        if (spText != null) spText.text = ""; // Trang Gen không dùng Điểm Kỹ Năng
-        if (previewWarningText != null) previewWarningText.gameObject.SetActive(false);
         
-        currentActiveBranch = null; // Bỏ đánh dấu nhánh kỹ năng
+        // --- MỚI: Ẩn hẳn cụm Text SP đi cho gọn ---
+        if (spText != null && spText.transform.parent != null) 
+            spText.transform.parent.gameObject.SetActive(false); 
+            
+        if (previewWarningText != null) previewWarningText.gameObject.SetActive(false);
+        currentActiveBranch = null; 
     }
 
     public void SwitchTab(string targetBranchID)
     {
+        // --- MỚI: Bật lại cụm Text SP khi quay về các tab kỹ năng khác ---
+        if (spText != null && spText.transform.parent != null) 
+            spText.transform.parent.gameObject.SetActive(true);
+
         foreach (var branch in branches)
         {
             if (branch.pagePanel != null) branch.pagePanel.SetActive(false);
